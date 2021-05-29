@@ -27,15 +27,13 @@ services:
       depends_on:
         - symfony
 
-
-
     node:
       image: trosiki/trosiki:node
       container_name: node
       ports:
         - 4200:4200
       volumes:
-        - "/home/trosiki/Documentos/projects/www/trosfolio_angular:/home/node/app/frontend"
+        - "/home/trosiki/Documentos/projects/www/trosfolio_angular/:/home/node/app/"
       tty: true
       command:
         - /bin/sh
@@ -44,6 +42,14 @@ services:
            cd /home/node/app/frontend && npm start
       expose:
         - "4200"
+
+    nginx_angular:
+      image: trosiki/trosiki:nginx
+      container_name: nginx_angular
+      volumes:
+        - "/home/trosiki/Documentos/projects/www/trosfolio_angular/angular8/:/var/www/html/"
+      ports:
+        - "81:80"
 
     mysql:
       image: mysql:8.0
