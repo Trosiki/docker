@@ -2,7 +2,7 @@ FROM node:latest
 
 RUN npm install npm@latest -g
 
-RUN apt install bash -y
+RUN apt install bash git -y
 
 RUN mkdir /home/node/.npm-global
 ENV PATH=/home/node/.npm-global/bin:$PATH
