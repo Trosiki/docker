@@ -34,14 +34,6 @@ services:
         - 4200:4200
       volumes:
         - "/home/trosiki/Documentos/projects/www/trosfolio_angular/:/home/node/app/"
-      tty: true
-      command:
-        - /bin/sh
-        - -c
-        - |
-           cd /home/node/app/frontend && npm start
-      expose:
-        - "4200"
 
     nginx_angular:
       image: trosiki/trosiki:nginx
