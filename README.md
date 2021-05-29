@@ -9,20 +9,47 @@ With docker-compose.yml we can initialize our containers. Depending of our requi
 version: '3.0'
 
 services:
-    symfony: 
+
+    symfony:
       image: trosiki/trosiki:symfony5
+      container_name: symfony
       volumes:
         - "/home/trosiki/Documentos/projects/www:/var/www"
         - "/home/trosiki/Documentos/projects/log:/var/log"
       restart: always
       ports:
-        - 80:80
+        - 9000:9000
       links:
         - mysql:mysql
 
-    angular:
-      image: node:current-alpine3.13
-      restart: always
+    nginx-symfony:
+      image: trosiki/trosiki:nginx
+      container_name: nginx_symfony
+      volumes:
+        - "/home/trosiki/Documentos/projects/www:/var/www"
+        - "./common/default.conf:/etc/nginx/conf.d/default.conf"
+        - "./common/default.conf:/etc/nginx/sites-available/default"
+        - "./common/extra-conf.ini /usr/local/etc/php/conf.d/extra-conf.ini"
+      ports:
+        - 80:80
+      depends_on:
+        - symfony
+
+    node:
+      image: trosiki/trosiki:node
+      container_name: node
+      ports:
+        - 4200:4200
+      volumes:
+        - "/home/trosiki/Documentos/projects/www/trosfolio_angular/:/home/node/app/"
+
+    nginx_angular:
+      image: trosiki/trosiki:nginx
+      container_name: nginx_angular
+      volumes:
+        - "/home/trosiki/Documentos/projects/www/trosfolio_angular/angular8/:/var/www/html/"
+      ports:
+        - "81:80"
 
     mysql:
       image: mysql:8.0
