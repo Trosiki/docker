@@ -35,14 +35,6 @@ services:
       volumes:
         - "/home/trosiki/Documentos/projects/www/trosfolio_angular/:/home/node/app/"
 
-    nginx_angular:
-      image: trosiki/trosiki:nginx
-      container_name: nginx_angular
-      volumes:
-        - "/home/trosiki/Documentos/projects/www/trosfolio_angular/angular8/:/var/www/html/"
-      ports:
-        - "81:80"
-
     mysql:
       image: mysql:8.0
       command: --default_authentication_plugin=mysql_native_password
