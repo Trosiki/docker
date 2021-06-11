@@ -13,7 +13,7 @@ RUN pecl install apcu \
     && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
     && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
-RUN apt-get -y install zlib1g-dev libzip-dev tar openssl libxrender-dev libx11-dev libxext-dev libfontconfig1-dev libfreetype6-dev fontconfig libcurl3-dev libxml2-dev wget xfonts-base xfonts-75dpi libc-client2007e-dev libc-client-dev libkrb5-dev libpng-dev libjpeg62-turbo-dev nano htop procps cron
+RUN apt-get -y install zlib1g-dev libzip-dev tar libxrender-dev libx11-dev libxext-dev libfontconfig1-dev libfreetype6-dev fontconfig libcurl3-dev libxml2-dev wget xfonts-base xfonts-75dpi libc-client2007e-dev libc-client-dev libkrb5-dev libpng-dev libjpeg62-turbo-dev nano htop procps cron
 
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install curl
