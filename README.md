@@ -5,6 +5,13 @@ On this repository I'll push my Docker configuration. It include Nginx configura
 The content and the distinct Dockerfiles will be order by Folders depending on the different functions of said Docker.
 ## Using docker-compose.yml
 With docker-compose.yml we can initialize our containers. Depending of our requirements we can delete some services.
+
+You can execute next command for validate the docker-compose.yml with parameters on .env file.
+```bash
+docker-compose --env-file ./.env config
+```
+
+docker-compose.yml
 ```yml
 version: '3.0'
 
@@ -12,10 +19,9 @@ services:
 
     symfony:
       image: trosiki/trosiki:symfony5
-      container_name: symfony
       volumes:
-        - "/home/trosiki/Documentos/projects/www:/var/www"
-        - "/home/trosiki/Documentos/projects/log:/var/log"
+        - ${WWW}:/var/www
+        - ${LOGS}:/var/log
       restart: always
       ports:
         - 9000:9000
@@ -24,12 +30,11 @@ services:
 
     nginx-symfony:
       image: trosiki/trosiki:nginx
-      container_name: nginx_symfony
       volumes:
-        - "/home/trosiki/Documentos/projects/www:/var/www"
-        - "./common/default.conf:/etc/nginx/conf.d/default.conf"
-        - "./common/default.conf:/etc/nginx/sites-available/default"
-        - "./common/extra-conf.ini /usr/local/etc/php/conf.d/extra-conf.ini"
+        - ${WWW}:/var/www
+        - ${DEFAULT_CONF_NGINX}:/etc/nginx/conf.d/default.conf
+        - ${DEFAULT_CONF_NGINX}:/etc/nginx/sites-available/default
+        - ${EXTRA_CONF_NGINX}:/usr/local/etc/php/conf.d/extra-conf.ini
       ports:
         - 80:80
       depends_on:
@@ -37,28 +42,35 @@ services:
 
     node:
       image: trosiki/trosiki:node
-      container_name: node
       ports:
         - 4200:4200
       volumes:
         - "/home/trosiki/Documentos/projects/www/trosfolio_angular/:/home/node/app/"
 
-    nginx_angular:
-      image: trosiki/trosiki:nginx
-      container_name: nginx_angular
-      volumes:
-        - "/home/trosiki/Documentos/projects/www/trosfolio_angular/angular8/:/var/www/html/"
-      ports:
-        - "81:80"
-
     mysql:
       image: mysql:8.0
       command: --default_authentication_plugin=mysql_native_password
       environment:
-        MYSQL_DATABASE: trosfoliodata
+        MYSQL_DATABASE: ${DATABASE_NAME}
         MYSQL_ROOT_PASSWORD: root
       volumes:
-        - "/home/trosiki/Documentos/projects/mysql-data:/var/lib/mysql"
+        - ${PATH_MYSQL_DATA}:/var/lib/mysql
+      ports:
+        - 3306:3306
+```
+
+.env file:
+```
+# PERSONAL CONFIG
+# WWW=/home/trosiki/Documentos/projects/www
+# PATH_PROJECT=/var/www/trosfolio_api/public
+# PATH_MYSQL_DATA=/home/trosiki/Documentos/projects/mysql-data
+# DATABASE_NAME=trosfoliodata
+
+# COMMON CONFIG
+LOGS=/home/trosiki/Documentos/projects/log
+DEFAULT_CONF_NGINX=/home/trosiki/Documentos/projects/docker/common/default.conf
+EXTRA_CONF_NGINX=/home/trosiki/Documentos/projects/docker/common/extra-conf.ini
 ```
 ## Symfony5 Folder
 This folder is the configuration from my Docker image in [Trosiki's Dockerhub](https://hub.docker.com/repository/docker/trosiki/trosiki/tags?page=1&ordering=last_updated).
